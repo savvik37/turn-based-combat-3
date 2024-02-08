@@ -10,17 +10,18 @@ function App() {
   const rollDice = (power) => {
     return Math.floor(Math.random() * power) + 1;
   }
-
-  // states
-  const [playerHealth, setPlayerHealth] = useState(100);
-  const [opponentHealth, setOpponentHealth] = useState(50);
-  const [pTurn, setPTurn] = useState(true);
-  const [opAlive, setOpAlive] = useState(true);
-  const [miss, setMiss] = useState(false);
-
+  
   // initialising players
   const player = new Character('Player', 100, 10, 5, 25);
-  const opponent = new Character('Opponent', 100, 10, 5, 10);
+  const opponent = new Character('Opponent', 50, 10, 5, 10);
+
+  // states
+  const [playerHealth, setPlayerHealth] = useState(player.health);
+  const [opponentHealth, setOpponentHealth] = useState(opponent.health);
+  const [pTurn, setPTurn] = useState(true);
+  const [opAlive, setOpAlive] = useState(true);
+  const [update, setUpdate] = useState(false);
+  const [updateText, setUpdateText] = useState("");
 
   // handing playeer attack
   const HandleAttack = () => {
@@ -38,9 +39,13 @@ function App() {
       if (newHealth <= 0 ){
         newHealth = 0;
         setOpAlive(false);
+        setUpdate(true);
+        setUpdateText("You defeated the opponent!");
       }
       setOpponentHealth(newHealth);
       console.log("Opponent Health: " + newHealth);
+      setUpdate(true);
+      setUpdateText("You hit the opponent ! APvDP: " + pAttack + "v" + OpBlock +"!");
       setPTurn(false);
 
       console.log("opponent about to attack")
@@ -50,10 +55,10 @@ function App() {
     }
     else if (pAttack <= OpBlock && opAlive===true){
       console.log("miss!")
-      setMiss(true);
+      setUpdate(true);
+      setUpdateText("You missed!");
       setPTurn(false);
       setTimeout(() => {
-        setMiss(false); // Reset miss state after displaying "Missed!" for a brief moment
       }, 1000);
       
       console.log("opponent about to attack")
@@ -65,10 +70,12 @@ function App() {
 
   const opponentAttack = () => {
     console.log("Opponent Attack Clicked");
-    setMiss(false);
+    
 
     if (opAlive===true){
       setTimeout(() => {
+        setUpdate(false);
+        setUpdateText("Opponent Attacking...");
 
         const opAttack = rollDice(opponent.attackPower);
         const pBlock = rollDice(player.defense);
@@ -80,8 +87,19 @@ function App() {
           }
           setPlayerHealth(newHealth);
           console.log("Player Health: " + newHealth);
-          setPTurn(true);
+
+          setUpdate(true);
+          setUpdateText("Opponent Hits! APvDP: " + opAttack + "v" + pBlock +"!");
+          setPTurn(false);
         }
+
+        else{
+          setUpdate(true);
+          setUpdateText("Opponent Misses!");
+          setPTurn(false);
+        }
+
+        setPTurn(true);
   
       }, 1000);
     }
@@ -99,6 +117,18 @@ function App() {
     setPTurn(false);
 
     opponentAttack();
+  }
+
+  const newOpponent = () => {
+    console.log('New Opponent Clicked')
+
+    const opponent = new Character('Opponent', 50, 10, 5, 10);
+    setOpponentHealth(opponent.health);
+
+    setOpAlive(true);
+    setPTurn(true);
+    setUpdate(true);
+        setUpdateText("New Opponent Arrives!");
   }
 
   return (
@@ -126,14 +156,18 @@ function App() {
 
             {!opAlive && (
             <div className="GameButtons">
-              <button>OPPONENT DEFEATED!</button>
+              <button 
+              onClick={newOpponent}
+              onMouseOver={e => e.currentTarget.innerText = "NEXT OPPONENT"} 
+              onMouseOut={e => e.currentTarget.innerText = "OPPONENT DEFEATED!"}
+              >OPPONENT DEFEATED!</button>
             </div> )}
         
         </div>
 
         <div className="Log">
-          {!miss && (<h2>Log</h2>)}
-          {miss && (<h2>Missed!</h2>)}
+          {!update && (<h2>Log</h2>)}
+          {update && (<h2>{updateText}</h2>)}
         </div>
 
         <div className="OpDiv">

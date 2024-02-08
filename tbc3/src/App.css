@@ -59,3 +59,7 @@ body {
 .GameButtons button:hover {
   background-color: #00000046;
 }
+
+.Log {
+  font-size: x-small;
+}
