@@ -63,3 +63,50 @@ body {
 .Log {
   font-size: x-small;
 }
+
+.DEAD {
+  margin-top: 20px;
+}
+
+.DEAD button {
+  font-family: 'Sixtyfour', sans-serif;
+  font-weight: bold;
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #ffffff00;
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  outline: none;
+}
+
+.DEAD button:hover {
+  
+  background-color: #f80000a1;
+}
+
+.MenuButtons {
+  font-family: 'Sixtyfour', sans-serif;
+  font-weight: bold;
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #ffffff00;
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  outline: none;
+}
+
+.MenuButtons:hover {
+  background-color: #00000046;
+}
+
+.ButtonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
