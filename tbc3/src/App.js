@@ -25,7 +25,7 @@ function App() {
       <h1>Supreme Nova</h1>
       
       {activateBattle && (
-          <div>
+          <div className="slide-in"> 
             <Battle /> 
           </div>
       )}

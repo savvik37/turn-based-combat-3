@@ -13,7 +13,18 @@ export function Battle() {
   }
   
   // initialising players
-  const player = new Character('Player', 100, 20, 10, 40);
+
+  let player = localStorage.getItem('player');
+    if (player) {
+        player = JSON.parse(player);
+    } 
+    else {
+        console.log('No player found in local storage - creating character!');
+        player = new Character('Player', 100, 20, 10, 40);
+        localStorage.setItem('player', JSON.stringify(player));
+    }
+
+  //const player = new Character('Player', 100, 20, 10, 40);
   const [opponent, setOpponent] = useState(new Character('Pleb', 50, 10, 5, 20));
 
   // states
@@ -49,6 +60,10 @@ export function Battle() {
       setUpdate(true);
       setUpdateText("You hit the opponent ! APvDP: " + pAttack + "v" + OpBlock +"!");
       setPTurn(false);
+
+      
+      player.health = newHealth;
+      localStorage.setItem('player', JSON.stringify(player));
 
       console.log("opponent about to attack")
       if (newHealth > 0) {
@@ -93,6 +108,8 @@ export function Battle() {
           }
           setPlayerHealth(newHealth);
           console.log("Player Health: " + newHealth);
+          player.health = newHealth;
+          localStorage.setItem('player', JSON.stringify(player));
 
           setUpdate(true);
           setUpdateText(opponent.name + " Hits! APvDP: " + opAttack + "v" + pBlock +"!");
@@ -138,6 +155,16 @@ export function Battle() {
         setUpdateText(newOpponent.name + " Arrives!");
   }
 
+  const handleRevive = () => {
+    console.log('Revive Clicked')
+    const newHealth = 100;
+    setPAlive(true);
+    setPlayerHealth(newHealth);
+    player.health = newHealth;
+    localStorage.setItem('player', JSON.stringify(player));
+    
+  }
+
   return (
     <div className="App">
       <div className="GameDiv">
@@ -158,7 +185,7 @@ export function Battle() {
 
             {!pAlive &&(
             <div className="DEAD">
-              <button>DEAD</button>
+              <button onClick={handleRevive}>DEAD</button>
             </div> )}
             
             {!pTurn && opAlive &&(
