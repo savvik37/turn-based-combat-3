@@ -1,6 +1,6 @@
 // App.js
 import React from 'react';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import './App.css';
 import Character from './Character';
 import Opponents from './Opponents';
@@ -25,16 +25,28 @@ export function Battle() {
     }
 
   //const player = new Character('Player', 100, 20, 10, 40);
-  const [opponent, setOpponent] = useState(new Character('Pleb', 50, 10, 5, 20));
+  const [opponent, setOpponent] = useState(Opponents[Math.floor(Math.random() * Opponents.length)]);
 
   // states
+  // -player states
   const [playerHealth, setPlayerHealth] = useState(player.health);
-  const [opponentHealth, setOpponentHealth] = useState(opponent.health);
-  const [pTurn, setPTurn] = useState(true);
-  const [opAlive, setOpAlive] = useState(true);
   const [pAlive, setPAlive] = useState(true);
+  const [pTurn, setPTurn] = useState(true);
+  
+  // -opponent states
+  const [opponentHealth, setOpponentHealth] = useState(opponent.health);
+  const [opAlive, setOpAlive] = useState(true);  
+  
+  // - game/log states
   const [update, setUpdate] = useState(false);
   const [updateText, setUpdateText] = useState("");
+
+  // check if player is alive
+  useEffect(() => {
+    if (playerHealth === 0){
+      setPAlive(false);
+    }
+  }, [playerHealth]);
 
   // handing playeer attack
   const HandleAttack = () => {
@@ -131,6 +143,7 @@ export function Battle() {
   // handing item use - WIPWIPWIPWIP
   const HandleItem = () => {
     console.log('Item Clicked')
+    
   }
 
   // handing player ending turn
@@ -175,6 +188,7 @@ export function Battle() {
           <p>Health: {playerHealth}</p>
           <p>Attack Power: {player.attackPower}</p>
           <p>Defense: {player.defense}</p>
+          <p>DAMAGE: {player.damage}</p>
           
           {pTurn && opAlive && pAlive &&(
             <div className="GameButtons">
@@ -215,6 +229,7 @@ export function Battle() {
           <p>Health: {opponentHealth}</p>
           <p>Attack Power: {opponent.attackPower}</p>
           <p>Defense: {opponent.defense}</p>
+          <p>DAMAGE: {opponent.damage}</p>
 
         </div>
 

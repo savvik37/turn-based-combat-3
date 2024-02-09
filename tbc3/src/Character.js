@@ -5,7 +5,7 @@ class Character {
       this.attackPower = attackPower;
       this.defense = defense;
       this.damage = damage;
-    }d
+    }
   
     // You can also add methods specific to the Character class here if needed
   }
