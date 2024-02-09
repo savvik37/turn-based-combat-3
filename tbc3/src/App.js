@@ -3,6 +3,7 @@ import React from 'react';
 import { Battle } from './battle';
 import { Template } from './template';
 import Inventory from './Inventory';
+import Items from './Items';
 import {useState, useEffect} from 'react';
 
 function App() {
@@ -11,12 +12,43 @@ function App() {
   const [activateBattle, setActivateBattle] = useState(false);
   const [activateInv, setActivateInv] = useState(false);
 
-  const inventoryData = [
-    { name: 'Sword', imageUrl: require('./assets/invicon/sword.png')},
-    { name: 'Shield', imageUrl: require('./assets/invicon/shield.png')},
-  ];
+  // player stuff
+  const [player, setPlayer] = useState(null)
+  useEffect(() => {
+    const storedPlayer = localStorage.getItem('player');
+    if (storedPlayer) {
+      const playerObj = JSON.parse(storedPlayer);
+      setPlayer(playerObj);
+      if (playerObj.items) {
+        setInventoryData(playerObj.items);
+      }
+    }
+  }, []);
+  
+  const playerItems = player ? player.items : [];
 
+  const [inventoryData, setInventoryData] = useState(playerItems);
 
+  const deleteItem = (itemToDelete) => {
+    setInventoryData(prevInventory => {
+      const newInventory = prevInventory.filter(item => item !== itemToDelete);
+      const updatedPlayer = { ...player, items: newInventory };
+      localStorage.setItem('player', JSON.stringify(updatedPlayer));
+      return newInventory;
+    });
+  };
+
+  // debug function to add sword to inventory
+  const addSword = () => {
+    setInventoryData(prevInventory => {
+      const newInventory = [...prevInventory, Items[0]];
+      const updatedPlayer = { ...player, items: newInventory };
+      localStorage.setItem('player', JSON.stringify(updatedPlayer));
+      return newInventory;
+    });
+  }
+
+  // use effect to handle battle activation
   useEffect(() => {
     if (activateBattle) {
       setMenu(false);
@@ -32,13 +64,15 @@ function App() {
 
     
     <div className="App">
+
+      <button onClick={addSword}>Add Sword</button>   
       
       {activateInv && <div className="overlay"></div>}
          
       <h1>RPG Battler</h1>
       <h3>Indev 0.1</h3>
 
-      {activateInv && (<Inventory inventory={inventoryData} setActivateInv={setActivateInv}/>)}
+      {activateInv && (<Inventory inventory={inventoryData} setActivateInv={setActivateInv} deleteItem={deleteItem}/>)}
         
       {activateBattle && (
           <div className="slide-in"> 

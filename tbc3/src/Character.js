@@ -5,9 +5,20 @@ class Character {
       this.attackPower = attackPower;
       this.defense = defense;
       this.damage = damage;
+      this.items = [];
     }
   
-    // You can also add methods specific to the Character class here if needed
+    addItem(item) {
+      this.items.push(item);
+    }
+    
+    removeItem(item) {
+      const index = this.items.indexOf(item);
+      if (index !== -1) {
+        this.items.splice(index, 1);
+      }
+    }
+    
   }
   
   export default Character;

@@ -7,19 +7,32 @@ const Tooltip = ({ tooltip }) => {
   if (!tooltip.show) return null;
 
   return (
-    <div style={{ position: 'fixed', top: tooltip.y, left: tooltip.x, zIndex: 1000, background: 'black', border: '1px solid black', borderRadius: '5px', padding: '5px' }}>
+    <div style={{ 
+      position: 'fixed', 
+      transform: `translate(${(tooltip.x) + 10}px, ${tooltip.y}px)`, 
+      zIndex: 1000, 
+      background: 'black', 
+      border: '1px solid black', 
+      borderRadius: '5px', 
+      padding: '5px' 
+    }}>
       {tooltip.content}
     </div>
   );
 };
 
 
-const InventorySlot = ({ item }) => {
+const InventorySlot = ({ item, deleteItem }) => {
   const [tooltip, setTooltip] = useState({ show: false, x: 0, y: 0, content: 'x' });
 
+  const handleClick = () => {
+    deleteItem(item);
+  }
+
   const handleMouseEnter = () => {
-    console.log('Mouse entered', item.name);
     setTooltip({ show: true, x: tooltip.x, y: tooltip.y, content: item.name });
+    console.log('Mouse entered on ' + item.name);
+
   };
 
   const handleMouseLeave = () => {
@@ -29,11 +42,17 @@ const InventorySlot = ({ item }) => {
 
   const handleMouseMove = (e) => {
     console.log('Mouse moved');
-    setTooltip({ show: true, x: e.clientX - 200, y: e.clientY - 400, content: item.name });
+
+    const rect = e.target.getBoundingClientRect();
+
+    let x = e.clientX - rect.left;
+    let y = e.clientY - rect.top;
+    
+    setTooltip({ show: true, x, y, content: item.name });
   };
 
   return (
-    <div className="inventory-slot" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} onMouseMove={handleMouseMove}>
+    <div className="inventory-slot" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} onMouseMove={handleMouseMove} onClick={handleClick}>
       {item && (
         <div className="item" title={item.name}>
           <img src={item.imageUrl} alt={item.name} />
