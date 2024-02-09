@@ -42,7 +42,7 @@ function App() {
         
       {activateBattle && (
           <div className="slide-in"> 
-            <Battle /> 
+            <Battle setActivateInv={setActivateInv} /> 
           </div>
       )}
 

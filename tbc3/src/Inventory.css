@@ -1,6 +1,7 @@
 .inventory-container {
   position: absolute;
   left: 50%;
+  bottom: 50%;
   transform: translate(-50%, -50%);
   display: grid;
   grid-template-columns: repeat(4, 1fr);

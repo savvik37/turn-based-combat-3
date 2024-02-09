@@ -5,7 +5,7 @@ import './App.css';
 import Character from './Character';
 import Opponents from './Opponents';
 
-export function Battle() {
+export function Battle(props) {
 
   // dice roller - v important for my game
   const rollDice = (power) => {
@@ -143,7 +143,7 @@ export function Battle() {
   // handing item use - WIPWIPWIPWIP
   const HandleItem = () => {
     console.log('Item Clicked')
-    
+    props.setActivateInv(true);
   }
 
   // handing player ending turn
